@@ -85,8 +85,26 @@ function viewAllEmployee() {
     
 }
 
+//Adding a department via inquirer
 function addDepartment() {
-    
+    return inquirer
+    .prompt([{
+        type: 'input',
+        name: 'name',
+        message: 'What is the name of the department?'
+        validate: function(name) {
+            if (!name) {
+                console.log('Please try to enter a name again.')
+                return false;
+            }
+            return true;
+        }
+    }])
+    .then((ans) => {
+        const department = new Department(ans.name);
+        newDepartment(department);
+        console.log ('Department Added');
+    })
 }
 
 function addRole() {
@@ -102,5 +120,5 @@ function updateEmployee() {
 }
 
 function quit() {
-    
+    return
 }
