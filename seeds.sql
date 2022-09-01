@@ -7,15 +7,13 @@ VALUES ('Sales'),
        ('Finance'),
        ('Legal');
 
-INSERT INTO roles (names)
-VALUES ('Sales'),
-       ('Engineering'),
-       ('Finance'),
-       ('Legal');
+INSERT INTO roles (id, title, salary, department_id)
+VALUES ('Sales person'),
+       ('Lead Engineer'),
+       ('Engineer'),
+       ('Accountant'),
+       ('Sales Lead');
 
-INSERT INTO employee (names)
-VALUES ('Sales'),
-       ('Engineering'),
-       ('Finance'),
-       ('Legal');
+INSERT INTO employee (first_name, last_name, manager_id, role_id)
+VALUES ('Michael', 'Jackson', 1, 1);
     

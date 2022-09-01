@@ -3,6 +3,8 @@ const mysql2 = require('mysql2');
 require('console.table');
 
 
+
+
 //connect to mysql2
 const db = mysql.createConnection(
     {
@@ -74,14 +76,28 @@ function choices() {
 
 //view all roles function
 function viewAllDepartments() {
+    db.query('SELECT * FROM department', function(err, res) {
+        if (err) throw err
+        console.table(res)
+        choices();
+    })
     
 }
 
 function viewAllRoles() {
+    db.query('SELECT * FROM roles', function (err, res) {
+        console.table(res);
+        choices();
+    })
 
 }
 
 function viewAllEmployee() {
+    db.query('SELECT * FROM employee', function(err, res) {
+        if (err) throw err
+        console.table(res)
+        choices();
+    })
     
 }
 
@@ -104,6 +120,8 @@ function addDepartment() {
         const department = new Department(ans.name);
         newDepartment(department);
         console.log ('Department Added');
+
+        return choices();
     })
 }
 
