@@ -3,6 +3,24 @@ const mysql2 = require('mysql2');
 require('console.table');
 
 
+//connect to mysql2
+const db = mysql.createConnection(
+    {
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'company_db'
+    },
+    console.log('connected to database')
+);
+
+//database initiator function
+db.connect(function(err) {
+    if (err) throw err
+    console.log('welcome to the database')
+    choices();
+});
+
 
 //Setup initial choices with inquirer for the user
 function choices() {
@@ -49,7 +67,40 @@ function choices() {
             case 'Quit':
                 quit();
                 break;
-                
+
         }
     })
+}
+
+//view all roles function
+function viewAllDepartments() {
+    
+}
+
+function viewAllRoles() {
+
+}
+
+function viewAllEmployee() {
+    
+}
+
+function addDepartment() {
+    
+}
+
+function addRole() {
+    
+}
+
+function addEmployee() {
+    
+}
+
+function updateEmployee() {
+    
+}
+
+function quit() {
+    
 }
