@@ -2,7 +2,7 @@ const inquirer = require('inquirer');
 const mysql2 = require('mysql2');
 require('console.table');
 
-
+const Department =  require('./lib/Department');
 
 
 //connect to mysql2
@@ -134,9 +134,24 @@ function addEmployee() {
 }
 
 function updateEmployee() {
+    return inquirer
+    .prompt([{
+        type: 'list',
+        name: 'employee',
+        message: 'Which employee would you like to update',
+        choices: employeeArray
+    },{
+        type: 'list',
+        name: 'newRole',
+        message: 'What is the employees new role',
+        choices:roleArray
+    }
+])
     
 }
 
 function quit() {
+    console.log('Good bye! Thank you for using our application');
     return
+    
 }
