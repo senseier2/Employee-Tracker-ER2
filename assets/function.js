@@ -11,15 +11,44 @@ const db = mysql.createConnection(
 
 
 
-//Update roles
-const updateRole = (info) => {
-    const sql = `UPDATE employee SET role = ? WHERE id = ?`
-    const params = [info.newRole, info.employee]
-    db.query(sql, params, (err, res) => {
+//Adding new departments that I can access data from
+const deptArrMain = () => {
+    const deptArr = [];
+    db.query(`SELECT * FROM department`, (err, rows) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        for (let i = 0; i < rows.length; i++) {
+            deptArr.push({name:rows[i].name, value:rows[i].id});
+        }
+    });
+    return deptArr;
+}
+
+//Pulling all departments
+const getDEPT = () => {
+    const departments = [];
+    db.query(`SELECT * FROM department`, (err, rows) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        for (let i = 0; i < row.length; i++) {
+            departments.push(rows[i]);
+        }
+    });
+    return departments;
+}
+
+//new department added to departments
+const newDept = (info) => {
+    const sql = `INSERT INTO department (names) VALUES ('$obj.name')`;
+    db.query(sql, (err, res) => {
         if (err) throw err;
         return;
     })
-}
+};
 
 //Getting employee data
 const getEmployees = () => {
@@ -36,26 +65,16 @@ const getEmployees = () => {
     return employees;
 }
 
-//Adding new departments that I can access data from
-const deptArrMain = () => {
-    const deptArr = [];
-    db.query(`SELECT * FROM department`, (err, rows) => {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        for (let i = 0; i < rows.length; i++) {
-            deptArr.push({name:rows[i].name, value:rows[i].id});
-        }
-    });
-    return deptArr;
-}
-
-//new department added to departments
-const newDept = (info) => {
-    const sql = `INSERT INTO department (names) VALUES ('$obj.name')`;
-    db.query(sql, (err, res) => {
+//Update roles
+const updateRole = (info) => {
+    const sql = `UPDATE employee SET role = ? WHERE id = ?`
+    const params = [info.newRole, info.employee]
+    db.query(sql, params, (err, res) => {
         if (err) throw err;
         return;
     })
-};
+}
+
+
+
+module.exports = {getDEPT, newDept, deptArrMain, getEmployees, updateRole}

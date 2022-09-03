@@ -3,6 +3,7 @@ const mysql2 = require('mysql2');
 require('console.table');
 
 const Department =  require('./lib/Department');
+const {getDEPT, newDept, deptArrMain, getEmployees, updateRole} = require('./assets/function');
 
 
 //connect to mysql2
