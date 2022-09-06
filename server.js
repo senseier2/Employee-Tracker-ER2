@@ -4,30 +4,30 @@ require('console.table');
 
 const Department =  require('./lib/Department');
 const {getDEPT, newDept, deptArrMain, getEmployees, updateRole, roleArrMain, employeeArrMain} = require('./assets/function');
+// const Connection = require('mysql2/typings/mysql/lib/Connection');
 let employeeArr = employeeArrMain();
 let roleArr = roleArrMain();
 
 //connect to mysql2
 const db = mysql2.createConnection(
     {
-        host: 'localhost',
-        user: 'root',
-        password: 'Password1',
-        database: 'company_db'
-    },
-    console.log('connected to database')
-);
+        host: "localhost",
+        user: "root",
+        password: "Password1",
+        database: "company_db",
+    });
 
 //database initiator function
 db.connect(function(err) {
     if (err) throw err
-    console.log('welcome to the database')
+    //Starting the choices inquirer prompt
     choices();
 });
 
 
 //Setup initial choices with inquirer for the user
 function choices() {
+    
     inquirer.prompt([
         {
             type: 'list',
@@ -79,13 +79,24 @@ function choices() {
 //view all roles function
 function viewAllDepartments() {
     console.log("Here are all the Departments\n");
-    
+
     db.query('SELECT * FROM department', function(err, res) {
         if (err) throw err
         console.table(res)
         choices();
     })
-    
+
+    // var query =
+    // `SELECT * from department`
+
+    // Connection.query(query, function (err, res) {
+    //     if (err) throw err;
+
+    //     console.table(res);
+    //     console.log("Departments viewed!\n");
+
+    //     choices();
+    // }); 
 }
 
 function viewAllRoles() {
@@ -148,7 +159,7 @@ function addRole() {
                 message: 'What is the department code?'
             }])
             .then((answer => {
-                var sql = `INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)`;
+                var sql = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`;
                 db.query(sql, [answer.addRole, answer.salary, answer.departmentid], (err, res) => {
                     if (err) throw err;
                     console.log('Added new role');

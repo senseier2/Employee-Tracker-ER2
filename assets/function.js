@@ -3,7 +3,7 @@ const db = mysql.createConnection(
     {
         host: 'localhost',
         user: 'root',
-        password: 'Auroksei1737@',
+        password: 'Password1',
         database: 'company_db'
     },
     console.log('connected to company_db')
@@ -53,7 +53,7 @@ const newDept = (info) => {
 //Getting employee data
 const getEmployees = () => {
     const employees = [];
-    db.query(`SELECT e.id, e.first_name, e.lastname, roles.title AS job_title, roles.salary AS salary, dapartment.names AS department, CONCAT(m.first_name, ' ',m.last_name) AS manager FROM employee e LEFT JOIN roles ON role_id = roles.id LEFT JOIN department ON roles.department_id = department.id LEFT JOIN employee m ON e.manager_id =m.id`, (err, rows) => {
+    db.query(`SELECT e.id, e.first_name, e.lastname, role.title AS job_title, role.salary AS salary, dapartment.names AS department, CONCAT(m.first_name, ' ',m.last_name) AS manager FROM employee e LEFT JOIN role ON role_id = roles.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee m ON e.manager_id =m.id`, (err, rows) => {
         if (err) {
             console.log(err);
             return;
@@ -83,7 +83,7 @@ const employeeArrMain = () => {
 //Array for roles to be accessed
 const roleArrMain = () => {
     const roleArr = [];
-    db.query(`SELECT * FROM roles`, (err, rows) => {
+    db.query(`SELECT * FROM role`, (err, rows) => {
         if (err) {
             console.log(err);
             return;
