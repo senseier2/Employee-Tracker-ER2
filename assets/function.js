@@ -3,10 +3,10 @@ const db = mysql.createConnection(
     {
         host: 'localhost',
         user: 'root',
-        password: '',
+        password: 'Auroksei1737@',
         database: 'company_db'
     },
-    console.log(connected to company_db)
+    console.log('connected to company_db')
 );
 
 
@@ -63,11 +63,41 @@ const getEmployees = () => {
         }
     });
     return employees;
+};
+
+//Array for access to employee data
+const employeeArrMain = () => {
+    const employeeArr = [];
+    db.query(`SELECT * FROM employee ORDER BY last_name`, (err, rows) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        for (let i = 0; i < rows.length; i++) {
+            employeeArr.push({name:rows[i].first_name + ' ' + rows[i].last_name, value:rows[i].id});
+        }
+    });
+    return employeeArr;
 }
 
-//Update roles
+//Array for roles to be accessed
+const roleArrMain = () => {
+    const roleArr = [];
+    db.query(`SELECT * FROM roles`, (err, rows) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        for (let i = 0; i < rows.length; i++) {
+            roleArrMain.push({name:rows[i].title, value:rows[i].id});
+        }
+    });
+    return roleArr;
+}
+
+//To update roles
 const updateRole = (info) => {
-    const sql = `UPDATE employee SET role = ? WHERE id = ?`
+    const sql = `UPDATE employee SET role_id = ? WHERE id = ?`
     const params = [info.newRole, info.employee]
     db.query(sql, params, (err, res) => {
         if (err) throw err;
@@ -77,4 +107,5 @@ const updateRole = (info) => {
 
 
 
-module.exports = {getDEPT, newDept, deptArrMain, getEmployees, updateRole}
+
+module.exports = {getDEPT, newDept, deptArrMain, getEmployees, updateRole, roleArrMain, employeeArrMain,}
