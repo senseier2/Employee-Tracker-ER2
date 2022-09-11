@@ -3,10 +3,9 @@ const mysql2 = require('mysql2');
 require('console.table');
 
 const Department =  require('./lib/Department');
-const {getDEPT, newDept, deptArrMain, getEmployees, updateRole, roleArrMain, employeeArrMain} = require('./assets/function');
-// const Connection = require('mysql2/typings/mysql/lib/Connection');
-let employeeArr = employeeArrMain();
-let roleArr = roleArrMain();
+const {getDEPT, newDept, deptArrFill, getEmployees, updateRole, roleArrFill, employeeArrFill} = require('./lib/functions');
+let employeeArr = employeeArrFill();
+let roleArr = roleArrFill();
 
 //connect to mysql2
 const db = mysql2.createConnection(
@@ -15,41 +14,49 @@ const db = mysql2.createConnection(
         user: "root",
         password: "Password1",
         database: "company_db",
-    });
+    },
+    console.log('You are connected to company_db')
+ );
 
 //database initiator function
 db.connect(function(err) {
     if (err) throw err
     //Starting the choices inquirer prompt
-    choices();
+    console.log('Database connection initiated');
+    menuChoices();
 });
 
-
 //Setup initial choices with inquirer for the user
-function choices() {
-    
+function menuChoices() {
     inquirer.prompt([
         {
             type: 'list',
             name: 'prompt',
-            message: 'What would you like to do?',
-            choices: ['View all Departments', 'View all Roles', 'View all Employees', 'Add department', 'Add Role', 'Add Employee', 'Update Employee Role', 'Quit']
+            message: "What would you like to do?",
+            choices: ['View all Departments', 
+            'View all Roles', 
+            'View all Employees', 
+            'Add department', 
+            'Add Role', 
+            'Add Employee', 
+            'Update Employee Role', 
+            'Quit'
+            ]
         }
-
-    ]
-    
+    ]  
+    //Using a switch case to choose the function path.
     ).then(function(data) {
-        switch (data.prompts) {
+        switch (data.prompt) {
             case 'View all Departments':
-                viewAllDepartments();
+                viewAllDept();
                 break;
 
             case 'View all Roles':
-                viewAllRoles();
+                viewRoles();
                 break;
 
             case 'View all Employees':
-                viewAllEmployee();
+                viewEmployee();
                 break;
 
             case 'Add department':
@@ -77,41 +84,28 @@ function choices() {
 };
 
 //view all roles function
-function viewAllDepartments() {
-    console.log("Here are all the Departments\n");
-
+function viewAllDept() {
     db.query('SELECT * FROM department', function(err, res) {
         if (err) throw err
-        console.table(res)
-        choices();
+        console.table(res);
+        console.log("working?");
+        menuChoices();
     })
-
-    // var query =
-    // `SELECT * from department`
-
-    // Connection.query(query, function (err, res) {
-    //     if (err) throw err;
-
-    //     console.table(res);
-    //     console.log("Departments viewed!\n");
-
-    //     choices();
-    // }); 
 }
 
-function viewAllRoles() {
+function viewRoles() {
     db.query('SELECT * FROM role', function (err, res) {
         console.table(res);
-        choices();
+        menuChoices();
     })
 
 }
 
-function viewAllEmployee() {
+function viewEmployee() {
     db.query('SELECT * FROM employee', function(err, res) {
         if (err) throw err
         console.table(res)
-        choices();
+        menuChoices();
     })
     
 }
@@ -133,10 +127,11 @@ function addDepartment() {
     }])
     .then((ans) => {
         const department = new Department(ans.name);
-        newDepartment(department);
+        newDept(department);
         console.log ('Department Added');
-
-        return choices();
+        departments = getDEPT();
+        deptArr = deptArrFill;
+        return menuChoices();
     })
 }
 
@@ -154,17 +149,24 @@ function addRole() {
                 message: 'What is the salary for this role?'
             },
             {
-                type: 'input',
-                name: 'departmentid',
-                message: 'What is the department code?'
+                type: 'list',
+                name: 'department_id',
+                message: 'What is the department code?',
+                choices: ["1", "2", "3", "4"]
             }])
             .then((answer => {
                 var sql = `INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`;
-                db.query(sql, [answer.addRole, answer.salary, answer.departmentid], (err, res) => {
+                db.query(sql, 
+                    [
+                        answer.addRole, 
+                        answer.salary, 
+                        answer.department_id
+                    ], 
+                    (err, res) => {
                     if (err) throw err;
                     console.log('Added new role');
                 })
-                choices();
+                menuChoices();
             }))
 
 }
@@ -173,9 +175,9 @@ function addEmployee() {
     return inquirer
     .prompt([{
         type: 'input',
-        name: 'first_name',
+        name: 'firstName',
         message: "What is the employee's first name?",
-        validate: function(firstname) {
+        validate: function(firstName) {
             if (!firstName) {
                 console.log('You must enter a name!')
                 return false;
@@ -184,10 +186,10 @@ function addEmployee() {
         }
     }, {
         type: 'input',
-        name: 'lastname',
+        name: 'lastName',
         message: "What is the employee's last name?",
         validate: function(lastName) {
-            if (!lastname) {
+            if (!lastName) {
                 console.log('You must enter a name')
                 return false;
             }
@@ -197,21 +199,28 @@ function addEmployee() {
         type: 'list',
         name: 'role',
         message: "What is the employee's role?",
-        choice: roleArr
+        choices: roleArr
     }, {
         type: 'list',
         name: 'manager',
         message: "Who is the employee's manager?",
-        choice: [{name:'No Manager', value:null}]
+        choices: [{name:'No Manager', value:null}].concat(employeeArr)
 
     }])
     .then((ans) => {
         var employee = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`;
-        db.query(employee, [ans.firstName, ans.lastName, ans.role, ans.manager], (err, response) => {
+        db.query(employee, 
+            [
+                ans.firstName, 
+                ans.lastName, 
+                ans.role, 
+                ans.manager
+            ], 
+            (err, response) => {
             if (err) throw err;
             console.log("Added New Employee")
         })
-        return choice();
+        return menuChoices();
     })
    
 };
@@ -228,14 +237,14 @@ function updateEmployee() {
         type: 'list',
         name: 'newRole',
         message: 'What is the employees new role',
-        choices:roleArr
+        choices: roleArr
     }])
     .then((ans) => {
         updateRole(ans);
         console.log('Role Updated!');
         employees = getEmployees();
         employeeArr = employeeArrFill();
-        return choice();
+        return menuChoices();
     })
 };
 

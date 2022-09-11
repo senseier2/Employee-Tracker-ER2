@@ -1,11 +1,11 @@
 -- Seed information for the created tables in the company database --
 
---Using the departments from the example Readme image --
-INSERT INTO department (name)
-VALUES ('Legal'), -- department 1 --
-       ('Engineering'), -- department 2 --
-       ('Sales'), -- department  3--
-       ('Finance'); -- department 4 --
+-- Using the departments from the example Readme image
+INSERT INTO department (name )
+VALUES ('Legal'), -- department 1
+       ('Engineering'), -- department 2
+       ('Sales'), -- department  3
+       ('Finance'); -- department 4
 
 INSERT INTO role (id, title, salary, department_id)
 VALUES (1, 'Salesperson', 80000, 3),
