@@ -7,6 +7,14 @@
 ## Description
     Employee tracking application for tracking employee roles, salary and depatment.  The employee tracking application allows you to also edit existing employee information.
 
+Here is a link to my video: 
+https://drive.google.com/file/d/1ZVhOtREClmxHes6TRGTeQwkvFE2e3Ykz/view
+
+Here is a link to my GitHub:
+https://github.com/senseier2/Employee-Tracker-week12
+
+There was no live links required this week.
+![](assets/Employee%20Tracker_er12.JPG)
 - - - - -
 
 ## Table of Contents
